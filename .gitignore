@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="refresh" content="5; url=https://www.wargods.ro/wcd/">
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const reportID = urlParams.get('id');
-        if (reportID) {
-            window.location.replace("https://www.wargods.ro/wcd/report.php?id=" + reportID);
+        function doRedirect() {
+            // Get the ID from the URL (e.g. ?id=3131277)
+            var urlParams = new URLSearchParams(window.location.search);
+            var reportID = urlParams.get('id');
+
+            if (reportID && reportID.length > 0) {
+                var target = "https://www.wargods.ro/wcd/report.php?id=" + reportID;
+                
+                // Fallback 2: JavaScript Redirect
+                window.location.href = target;
+                
+                // Fallback 3: Extra aggressive redirect for old browsers
+                setTimeout(function() {
+                    window.location.replace(target);
+                }, 500);
+            } else {
+                document.getElementById('msg').innerHTML = "<h1 style='color:red;'>No ID found in link!</h1><p>Example: ?id=3131277</p>";
+            }
         }
     </script>
 </head>
-<body style="background:#000;color:#fff;text-align:center;padding-top:50px;font-family:sans-serif;">
-    <p>Redirecting to WarGods Report...</p>
+<body onload="doRedirect()" style="background:#000; color:#fff; text-align:center; font-family:sans-serif; padding-top:50px;">
+    <div id="msg">
+        <h2>WarGods Redirect</h2>
+        <p>Sending you to the report...</p>
+        <p>If the page doesn't change, <a id="manualLink" href="#" style="color:#00ff00;">Click Here</a></p>
+    </div>
+
+    <script>
+        // Set the manual link just in case
+        var urlParams = new URLSearchParams(window.location.search);
+        var reportID = urlParams.get('id');
+        if (reportID) {
+            document.getElementById('manualLink').href = "https://www.wargods.ro/wcd/report.php?id=" + reportID;
+        }
+    </script>
 </body>
 </html>
